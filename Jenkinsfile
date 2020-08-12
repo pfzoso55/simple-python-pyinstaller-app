@@ -13,7 +13,6 @@ pipeline {
             steps {
                 sh 'python -m py_compile sources/add2vals.py sources/calc.py'
                 stash(name: 'compiled-results', includes: 'sources/*.py*')
-                sh 'ls sources'
             }
         }
         stage('Test') {
@@ -34,13 +33,12 @@ pipeline {
         stage('Deliver') { 
             agent any
             environment { 
-                VOLUME = 'C:/myApps/jenkins/workspace/python_master/sources:/src'
+                VOLUME = '$(pwd)/sources:/src'
                 IMAGE = 'cdrx/pyinstaller-linux:python2'
             }
             steps {
                 dir(path: env.BUILD_ID) { 
-                    unstash(name: 'compiled-results')
-                    sh 'ls $(pwd)/sources'
+                    unstash(name: 'compiled-results') 
                     sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'" 
                 }
             }
