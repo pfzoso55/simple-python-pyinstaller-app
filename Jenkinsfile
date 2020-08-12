@@ -34,7 +34,7 @@ pipeline {
         stage('Deliver') { 
             agent any
             environment { 
-                VOLUME = 'C:\myApps\jenkins\workspace\python_master\sources:/src'
+                VOLUME = 'C:/myApps/jenkins/workspace/python_master/sources:/src'
                 IMAGE = 'cdrx/pyinstaller-linux:python2'
             }
             steps {
